@@ -17,8 +17,28 @@ class StaffDetailsBioData extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
+        color: Colors.red, //Colors.purple.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26.withOpacity(0.2),
+            offset: const Offset(
+              1.0,
+              1.0,
+            ),
+            blurRadius: 90.0,
+            spreadRadius: 3.0,
+          ),
+          BoxShadow(
+            color: Colors.black12.withOpacity(0.1),
+            offset: const Offset(
+              1.0,
+              1.0,
+            ),
+            blurRadius: 75.0,
+            spreadRadius: 1.0,
+          )
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

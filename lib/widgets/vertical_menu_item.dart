@@ -22,7 +22,7 @@ class VerticalMenuItem extends StatelessWidget {
         },
         child: Obx(() => Container(
               color: menuController.isHovering(itemName)
-                  ? lightGrey.withOpacity(.1)
+                  ? active //lightGrey.withOpacity(.1)
                   : Colors.transparent,
               child: Row(
                 children: <Widget>[

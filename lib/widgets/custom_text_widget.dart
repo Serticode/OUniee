@@ -17,6 +17,7 @@ class CustomTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       pageTitle,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: titleColour,
         fontSize: titleSize,

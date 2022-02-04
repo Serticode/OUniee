@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:ouniee/pages/dashboard.dart';
-
-class MainBody extends StatefulWidget {
-  const MainBody({Key? key}) : super(key: key);
+import 'package:ouniee/pages/authenticate/sign_up/sign_up_page_one.dart';
+/* 
+class Landing extends StatefulWidget {
+  const Landing({Key? key}) : super(key: key);
 
   @override
-  _MainBodyState createState() => _MainBodyState();
+  _LandingState createState() => _LandingState();
 }
 
-class _MainBodyState extends State<MainBody> {
+class _LandingState extends State<Landing> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+} */
+
+class LandingPageBody extends StatefulWidget {
+  const LandingPageBody({Key? key}) : super(key: key);
+
+  @override
+  _LandingPageBody createState() => _LandingPageBody();
+}
+
+class _LandingPageBody extends State<LandingPageBody> {
   double containerTwoMargin = 700.0;
   Color getStartedButtonColour = Colors.black;
 
@@ -70,12 +84,11 @@ class _MainBodyState extends State<MainBody> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => Dashboard(),
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (_) => const SignUpPageOne(),
                     ));
                   },
                   onHover: (value) {
-                    debugPrint("Hovered over $value");
                     value
                         ? setState(() {
                             getStartedButtonColour = Colors.blue.shade900;

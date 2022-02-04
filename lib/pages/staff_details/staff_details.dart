@@ -47,6 +47,7 @@ class StaffDetailsPage extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.height / 1.8,
                   padding: const EdgeInsets.all(20.0),
+                  color: Colors.red,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,

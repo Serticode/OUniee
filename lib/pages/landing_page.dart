@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ouniee/widgets/main_body.dart';
+import 'package:ouniee/widgets/landing_page_body.dart';
 import 'package:ouniee/widgets/footer.dart';
 import 'package:ouniee/widgets/header.dart';
 
@@ -28,7 +28,7 @@ class LandingPage extends StatelessWidget {
         margin: EdgeInsets.symmetric(
             vertical: _screenSize.height / 15,
             horizontal: _screenSize.width / 7),
-        child: const MainBody(),
+        child: const LandingPageBody(),
       ),
       bottomNavigationBar: const Footer(
         developerName: 'Serticode',

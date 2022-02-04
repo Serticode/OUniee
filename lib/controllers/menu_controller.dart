@@ -37,7 +37,7 @@ class MenuController extends GetxController {
   }
 
   Widget _customIcon(IconData icon, String itemName) {
-    if (isActive(itemName)) return Icon(icon, size: 24, color: dark);
+    if (isActive(itemName)) return Icon(icon, size: 24, color: active);
 
     return Icon(
       icon,

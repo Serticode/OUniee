@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ouniee/pages/authenticate/sign_in/sign_in.dart';
+import 'package:ouniee/pages/authenticate/sign_up/sign_up_page_one.dart';
 
 class Header extends StatefulWidget {
   final String landingPageTitle;
@@ -15,6 +17,9 @@ class _HeaderState extends State<Header> {
       letterSpacing: 1.05,
       fontSize: 18.0,
       fontFamily: "Mohave-Regular");
+
+  Color getStartedButtonColour = Colors.black;
+  Color getStartedButtonColour2 = Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +41,9 @@ class _HeaderState extends State<Header> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     IconButton(
-                      onPressed: (){},
+                      onPressed: () {},
                       iconSize: 32.0,
-                      icon: const Icon( Icons.school_outlined),
+                      icon: const Icon(Icons.school_outlined),
                     ),
                     InkWell(
                         child: Text(
@@ -59,22 +64,63 @@ class _HeaderState extends State<Header> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  //!LOGIN
                   InkWell(
-                      child: Text(
-                    "LOG IN",
-                    style: _headerTextStyle,
-                  )),
-                  InkWell(
+                      onHover: (value) {
+                        value
+                            ? setState(() {
+                                getStartedButtonColour = Colors.blue.shade900;
+                              })
+                            : setState(() {
+                                getStartedButtonColour = Colors.black;
+                              });
+                      },
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (_) => const SignIn(),
+                        ));
+                      },
                       child: Container(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("GET STARTED",
-                        style: _headerTextStyle.copyWith(
-                          color: Colors.white,
-                        )),
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(30.0)),
-                  )),
+                        width: 120.0,
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          "LOG IN",
+                          textAlign: TextAlign.center,
+                          style: _headerTextStyle.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: getStartedButtonColour,
+                            borderRadius: BorderRadius.circular(30.0)),
+                      )),
+
+                  //!GET STARTED
+                  InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (_) => const SignUpPageOne(),
+                        ));
+                      },
+                      onHover: (value) {
+                        value
+                            ? setState(() {
+                                getStartedButtonColour2 = Colors.blue.shade900;
+                              })
+                            : setState(() {
+                                getStartedButtonColour2 = Colors.black;
+                              });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text("GET STARTED",
+                            style: _headerTextStyle.copyWith(
+                              color: Colors.white,
+                            )),
+                        decoration: BoxDecoration(
+                            color: getStartedButtonColour2,
+                            borderRadius: BorderRadius.circular(30.0)),
+                      )),
                 ],
               )),
         ],
