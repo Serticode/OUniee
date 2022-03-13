@@ -1,19 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ouniee/pages/authenticate/sign_up/sign_up_page_one.dart';
-/* 
-class Landing extends StatefulWidget {
-  const Landing({Key? key}) : super(key: key);
-
-  @override
-  _LandingState createState() => _LandingState();
-}
-
-class _LandingState extends State<Landing> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-} */
+import 'package:ouniee/constants/style.dart';
+import 'package:ouniee/pages/authenticate/sign_up/sign_up.dart';
 
 class LandingPageBody extends StatefulWidget {
   const LandingPageBody({Key? key}) : super(key: key);
@@ -24,7 +11,8 @@ class LandingPageBody extends StatefulWidget {
 
 class _LandingPageBody extends State<LandingPageBody> {
   double containerTwoMargin = 700.0;
-  Color getStartedButtonColour = Colors.black;
+  Color _getStartedButtonColour = active;
+  bool _isHovering = false;
 
   final TextStyle _bodyTextStyle = const TextStyle(
       color: Colors.black87,
@@ -38,7 +26,7 @@ class _LandingPageBody extends State<LandingPageBody> {
       const Duration(milliseconds: 700),
     ).then((value) {
       setState(() {
-        containerTwoMargin = 0.0;
+        containerTwoMargin = 30.0;
       });
     });
   }
@@ -53,26 +41,26 @@ class _LandingPageBody extends State<LandingPageBody> {
   Widget build(BuildContext context) {
     Size _screenSize = MediaQuery.of(context).size;
 
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          //!LEFT CONTAINER
-          Container(
-            height: _screenSize.height / 2,
-            padding: const EdgeInsets.symmetric(vertical: 32.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      margin: EdgeInsets.symmetric(
+        vertical: _screenSize.height * 0.02,
+        horizontal: _screenSize.width * 0.01,
+      ),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            //!LEFT CONTAINER
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Promotion",
+                  "Promotion\nSeason",
                   style: _bodyTextStyle,
                 ),
-                Text(
-                  "Season ...",
-                  style: _bodyTextStyle,
+                SizedBox(
+                  height: _screenSize.height * 0.05,
                 ),
                 Text(
                   "Do you think you meet the requirements"
@@ -82,80 +70,87 @@ class _LandingPageBody extends State<LandingPageBody> {
                     fontSize: 24.0,
                   ),
                 ),
+                SizedBox(
+                  height: _screenSize.height * 0.05,
+                ),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (_) => const SignUpPageOne(),
+                      builder: (_) => const SignUp(),
                     ));
                   },
                   onHover: (value) {
                     value
                         ? setState(() {
-                            getStartedButtonColour = Colors.blue.shade900;
+                            _isHovering = value;
+                            _getStartedButtonColour = Colors.white;
                           })
                         : setState(() {
-                            getStartedButtonColour = Colors.black;
+                            _isHovering = false;
+                            _getStartedButtonColour = active;
                           });
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(12.0),
+                    width: _screenSize.width * 0.1,
                     child: Text(
-                      "GET STARTED",
+                      "Get Started",
+                      textAlign: TextAlign.center,
                       style: _bodyTextStyle.copyWith(
                           fontFamily: "poppins-Regular",
-                          color: Colors.white,
+                          color: _isHovering ? active : Colors.white,
                           fontSize: 16.0),
                     ),
                     decoration: BoxDecoration(
-                        color: getStartedButtonColour,
+                        color: _getStartedButtonColour,
                         borderRadius: BorderRadius.circular(30.0)),
                   ),
                 ),
               ],
             ),
-          ),
 
-          //!RIGHT CONTAINER
-          Expanded(
-            child: ListView(children: <Widget>[
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 2000),
-                curve: Curves.decelerate,
-                padding: const EdgeInsets.symmetric(vertical: 32.0),
-                margin: EdgeInsets.symmetric(vertical: containerTwoMargin),
-                height: _screenSize.height / 1.5,
-                width: _screenSize.width / 2.3,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey.shade200,
-                  image: const DecorationImage(
-                    image: AssetImage("images/landing_page_image.png"),
-                    fit: BoxFit.contain,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26.withOpacity(0.2),
-                      offset: const Offset(
-                        1.0,
-                        1.0,
-                      ),
-                      blurRadius: 90.0,
-                      spreadRadius: 3.0,
+            //!RIGHT CONTAINER
+            Expanded(
+              child: ListView(children: <Widget>[
+                AnimatedContainer(
+                  duration: const Duration(seconds: 2),
+                  curve: Curves.decelerate,
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  margin: EdgeInsets.symmetric(vertical: containerTwoMargin),
+                  height: _screenSize.height * 0.6,
+                  width: _screenSize.width * 0.6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.shade200,
+                    image: const DecorationImage(
+                      image: AssetImage("images/landing_page_image.png"),
+                      fit: BoxFit.contain,
                     ),
-                    BoxShadow(
-                      color: Colors.black12.withOpacity(0.1),
-                      offset: const Offset(
-                        1.0,
-                        1.0,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26.withOpacity(0.2),
+                        offset: const Offset(
+                          1.0,
+                          1.0,
+                        ),
+                        blurRadius: 90.0,
+                        spreadRadius: 3.0,
                       ),
-                      blurRadius: 75.0,
-                      spreadRadius: 1.0,
-                    )
-                  ],
+                      BoxShadow(
+                        color: Colors.black12.withOpacity(0.1),
+                        offset: const Offset(
+                          1.0,
+                          1.0,
+                        ),
+                        blurRadius: 75.0,
+                        spreadRadius: 1.0,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ]),
-          ),
-        ]);
+              ]),
+            ),
+          ]),
+    );
   }
 }

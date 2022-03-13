@@ -1,27 +1,26 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/route_manager.dart';
-import 'package:ouniee/config/config.dart';
+import 'package:ouniee/constants/firebase.dart';
 import 'package:ouniee/constants/style.dart';
+import 'package:ouniee/controllers/auth_controller.dart';
 import 'package:ouniee/controllers/menu_controller.dart';
 import 'package:ouniee/controllers/navigation_controller.dart';
-//import 'package:ouniee/pages/dashboard.dart';
-import 'package:ouniee/pages/landing_page.dart';
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:ouniee/controllers/staff_data_controller.dart';
+import 'package:ouniee/controllers/submitted_application_controller.dart';
+import 'package:ouniee/pages/landing_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(MenuController());
-  Get.put(NavigationController());
-  final configurations = Configurations();
-
-  await Firebase.initializeApp(
-      options: FirebaseOptions(
-          apiKey: configurations.apiKey,
-          appId: configurations.appId,
-          messagingSenderId: configurations.messagingSenderId,
-          projectId: configurations.projectId));
+  await initialization.then((value) {
+    Get.put(AuthController());
+    Get.put(StaffDataController());
+    Get.put(SubmittedApplicationsController());
+    Get.put(NavigationController());
+    Get.put(MenuController());
+  });
 
   runApp(const MyApp());
 }
@@ -34,6 +33,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "OUniee",
+      scrollBehavior: MyCustomScrollBehavior(), // <== add here
       theme: ThemeData(
           scaffoldBackgroundColor: active.withOpacity(.05),
           pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -43,4 +43,13 @@ class MyApp extends StatelessWidget {
       home: const LandingPage(),
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }

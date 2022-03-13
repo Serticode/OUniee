@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ouniee/constants/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Footer extends StatefulWidget {
@@ -11,8 +12,8 @@ class Footer extends StatefulWidget {
 }
 
 class _FooterState extends State<Footer> {
-  final TextStyle _footerTextStyle = const TextStyle(
-      color: Colors.black87,
+  final TextStyle _footerTextStyle = TextStyle(
+      color: active,
       fontWeight: FontWeight.w600,
       letterSpacing: 1.05,
       fontSize: 18.0,
@@ -22,9 +23,11 @@ class _FooterState extends State<Footer> {
   Widget build(BuildContext context) {
     Size _screenSize = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: _screenSize.width / 7),
-      height: _screenSize.height / 10,
-      width: _screenSize.width / 1.5,
+      margin: EdgeInsets.symmetric(
+        vertical: _screenSize.height * 0.005,
+        horizontal: _screenSize.width * 0.05,
+      ),
+      height: _screenSize.height * 0.08,
       child: Row(
         //!MAIN ROW
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +35,7 @@ class _FooterState extends State<Footer> {
         children: <Widget>[
           //!LEFT SIDE CONTAINER
           SizedBox(
-              width: _screenSize.width / 5,
+              width: _screenSize.width * 0.3,
               child: Row(children: <Widget>[
                 const Icon(
                   Icons.copyright_outlined,
@@ -50,7 +53,7 @@ class _FooterState extends State<Footer> {
 
           //!RIGHT SIDE CONTAINER
           SizedBox(
-              width: _screenSize.width / 3,
+              width: _screenSize.width * 0.5,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[

@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ouniee/constants/style.dart';
-import 'package:ouniee/pages/dashboard.dart';
+import 'package:ouniee/controllers/auth_controller.dart';
 import 'package:ouniee/pages/landing_page.dart';
-import 'package:ouniee/services/auth/auth.dart';
 import 'package:ouniee/widgets/custom_text_widget.dart';
 
 class SignIn extends StatefulWidget {
@@ -16,7 +14,6 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   //!KEY, AUTH & TEXT CONTROLLERS
   final _formKey = GlobalKey<FormState>();
-  final _theAuthServiceInstance = AuthService();
   final _theStaffEmailController = TextEditingController();
   final _theStaffPasswordController = TextEditingController();
 
@@ -44,10 +41,7 @@ class _SignInState extends State<SignIn> {
   @override
   void dispose() {
     //!DISPOSE ALL TEXT FIELD CONTROLLERS
-    /* _theNameController.dispose();
-    _theStaffIDController.dispose();
-    _theStaffDepartmentController.dispose();
-     */
+
     _theStaffEmailController.dispose();
     _theStaffPasswordController.dispose();
     super.dispose();
@@ -60,13 +54,11 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       body: Align(
         alignment: Alignment.centerLeft,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 700),
-          height: _screenSize.height / 2.5,
-          width: _screenSize.width / 3,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 20.0,
+        child: Container(
+          height: _screenSize.height * 0.5,
+          width: _screenSize.width * 0.4,
+          padding: const EdgeInsets.all(
+            20.0,
           ),
           margin: const EdgeInsets.only(
             left: 120.0,
@@ -119,185 +111,161 @@ class _SignInState extends State<SignIn> {
 
               //!LOGIN FORM FIELD.
               Expanded(
-                child: SizedBox(
-                  height: (_screenSize.height / 2) / 1.5,
-                  width: (_screenSize.width / 2) / 3,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        //!TITLE
-                        CustomTextWidget(
-                            pageTitle: "Login",
-                            titleColour: active,
-                            titleSize: 32.0,
-                            titleFontWeight: FontWeight.w600),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //!TITLE
+                      CustomTextWidget(
+                          pageTitle: "Login",
+                          titleColour: active,
+                          titleSize: 32.0,
+                          titleFontWeight: FontWeight.w600),
 
-                        //!TEXT FORM FIELD
-                        //!EMAIL
+                      //!TEXT FORM FIELD
+                      //!EMAIL
 
-                        TextFormField(
-                          controller: _theStaffEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          maxLength: 32,
-                          decoration: _theTextFieldDecorator,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Enter your e-mail address";
-                            } else if (value.contains("@") == false) {
-                              return "This is not a valid e-mail address";
-                            } else {
-                              return null;
-                            }
-                          },
+                      TextFormField(
+                        controller: _theStaffEmailController,
+                        keyboardType: TextInputType.emailAddress,
+                        maxLength: 32,
+                        decoration: _theTextFieldDecorator,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Enter your e-mail address";
+                          } else if (value.contains("@") == false) {
+                            return "This is not a valid e-mail address";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+
+                      //!PASSWORD
+                      TextFormField(
+                        controller: _theStaffPasswordController,
+                        keyboardType: TextInputType.emailAddress,
+                        maxLength: 32,
+                        obscureText: true,
+                        obscuringCharacter: "*",
+                        decoration: _theTextFieldDecorator.copyWith(
+                          label: CustomTextWidget(
+                              pageTitle: "Password: ",
+                              titleColour: active,
+                              titleSize: 18.0,
+                              titleFontWeight: FontWeight.w600),
                         ),
+                        validator: (value) {
+                          //!TODO ... ENSURE VERIFICATION FOR USER PASSWORD.
+                          if (value == null || value.isEmpty) {
+                            return "Enter a password";
+                          } else if (value.length < 6) {
+                            return "Password must be at least 6 characters long";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
 
-                        //!PASSWORD
-                        TextFormField(
-                          controller: _theStaffPasswordController,
-                          keyboardType: TextInputType.emailAddress,
-                          maxLength: 32,
-                          obscureText: true,
-                          obscuringCharacter: "*",
-                          decoration: _theTextFieldDecorator.copyWith(
-                            label: CustomTextWidget(
-                                pageTitle: "Password: ",
-                                titleColour: active,
-                                titleSize: 18.0,
-                                titleFontWeight: FontWeight.w600),
+                      //!SUBMIT BUTTON
+                      //!BUTTONS
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          //!RETURN BUTTON
+                          SizedBox(
+                            width: _screenSize.width * 0.12,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (context) {
+                                    return const LandingPage();
+                                  }));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(20.0),
+                                  primary: active,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    //!ICON
+                                    Icon(
+                                      Icons.navigate_before_outlined,
+                                      size: 28.0,
+                                      color: light,
+                                    ),
+
+                                    //!TEXT
+                                    CustomTextWidget(
+                                        pageTitle: "Homepage",
+                                        titleColour: light,
+                                        titleSize: 18.0,
+                                        titleFontWeight: FontWeight.w600),
+                                  ],
+                                )),
                           ),
-                          validator: (value) {
-                            //!TODO ... ENSURE VERIFICATION FOR USER PASSWORD.
-                            if (value == null || value.isEmpty) {
-                              return "Enter a password";
-                            } else if (value.length < 6) {
-                              return "Password must be at least 6 characters long";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
 
-                        //!SUBMIT BUTTON
-                        //!BUTTONS
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            //!RETURN BUTTON
-                            SizedBox(
-                              width: ((_screenSize.width / 2) / 3) / 2,
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(builder: (context) {
-                                      return const LandingPage();
-                                    }));
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(20.0),
-                                    primary: active,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      //!ICON
-                                      Icon(
-                                        Icons.navigate_before_outlined,
-                                        size: 28.0,
-                                        color: light,
-                                      ),
+                          //!SUBMIT BUTTON
+                          SizedBox(
+                            width: _screenSize.width * 0.12,
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    //!FETCH CONTENT OF TEXT FORM FIELDS
+                                    String _enteredEmail =
+                                        _theStaffEmailController.text;
+                                    String _enteredPassword =
+                                        _theStaffPasswordController.text;
 
-                                      //!TEXT
-                                      CustomTextWidget(
-                                          pageTitle: "Homepage",
-                                          titleColour: light,
-                                          titleSize: 18.0,
-                                          titleFontWeight: FontWeight.w600),
-                                    ],
-                                  )),
-                            ),
-
-                            //!SUBMIT BUTTON
-                            SizedBox(
-                              width: ((_screenSize.width / 2) / 3) / 2,
-                              child: ElevatedButton(
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      //!FETCH CONTENT OF TEXT FORM FIELDS
-                                      String _enteredEmail =
-                                          _theStaffEmailController.text;
-                                      String _enteredPassword =
-                                          _theStaffPasswordController.text;
-
-                                      //!USE CONTENT TO REGISTER USER
-                                      try {
-                                        //!RUN REGISTRATION.
-                                        await _theAuthServiceInstance
-                                            .signInWithEmailAndPassword(
-                                                email: _enteredEmail,
-                                                password: _enteredPassword)
-                                            .whenComplete(() {
-                                          //!WHEN COMPLETE, PUSH TO DASHBOARD
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return Dashboard();
-                                          }));
-                                        });
-                                      } on FirebaseAuthException catch (e) {
-                                        if (e.code == 'weak-password') {
-                                          debugPrint(
-                                              'The password provided is too weak.');
-                                        } else if (e.code ==
-                                            'email-already-in-use') {
-                                          debugPrint(
-                                              'The account already exists for that email.');
-                                        }
-                                      } catch (e) {
-                                        debugPrint(e.toString());
-                                      }
-
-                                      //!CHECK IF USER HAS BEEN REGISTERED.
-                                      //!PUSH TO DASHBOARD IF USER IS REGISTERED.
-
+                                    //!USE CONTENT TO REGISTER USER
+                                    try {
+                                      //!RUN REGISTRATION.
+                                      AuthController.getXSignIn(
+                                          userEmail: _enteredEmail,
+                                          userPassword: _enteredPassword);
+                                    } catch (e) {
+                                      //debugPrint(e.toString());
                                     }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(20.0),
-                                    primary: active,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      //!ICON
-                                      Icon(
-                                        Icons.navigate_next_outlined,
-                                        size: 28.0,
-                                        color: light,
-                                      ),
 
-                                      //!TEXT
-                                      CustomTextWidget(
-                                          pageTitle: "Login",
-                                          titleColour: light,
-                                          titleSize: 18.0,
-                                          titleFontWeight: FontWeight.w600),
-                                    ],
-                                  )),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                                    //!CHECK IF USER HAS BEEN REGISTERED.
+                                    //!PUSH TO DASHBOARD IF USER IS REGISTERED.
+
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(20.0),
+                                  primary: active,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    //!ICON
+                                    Icon(
+                                      Icons.navigate_next_outlined,
+                                      size: 28.0,
+                                      color: light,
+                                    ),
+
+                                    //!TEXT
+                                    CustomTextWidget(
+                                        pageTitle: "Login",
+                                        titleColour: light,
+                                        titleSize: 18.0,
+                                        titleFontWeight: FontWeight.w600),
+                                  ],
+                                )),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               )

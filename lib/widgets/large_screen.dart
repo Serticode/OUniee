@@ -10,7 +10,7 @@ class LargeScreen extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Expanded(child: SideMenu()),
+        const Expanded(flex: 1, child: SideMenu()),
         Expanded(
             flex: 5,
             child: Container(

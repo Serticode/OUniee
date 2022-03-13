@@ -22,7 +22,7 @@ class VerticalMenuItem extends StatelessWidget {
         },
         child: Obx(() => Container(
               color: menuController.isHovering(itemName)
-                  ? active //lightGrey.withOpacity(.1)
+                  ? active
                   : Colors.transparent,
               child: Row(
                 children: <Widget>[
@@ -39,34 +39,32 @@ class VerticalMenuItem extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: menuController.returnIconFor(itemName),
-                          ),
-                          if (!menuController.isActive(itemName))
-                            Flexible(
-                                child: CustomTextWidget(
-                              pageTitle: itemName,
-                              titleColour: menuController.isHovering(itemName)
-                                  ? Colors.white
-                                  : lightGrey,
-                              titleFontWeight: FontWeight.normal,
-                              titleSize: 16,
-                            ))
-                          else
-                            Flexible(
-                                child: CustomTextWidget(
-                              pageTitle: itemName,
-                              titleColour: Colors.white,
-                              titleSize: 20,
-                              titleFontWeight: FontWeight.bold,
-                            ))
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: menuController.returnIconFor(itemName),
+                        ),
+                        if (!menuController.isActive(itemName))
+                          Flexible(
+                              child: CustomTextWidget(
+                            pageTitle: itemName,
+                            titleColour: menuController.isHovering(itemName)
+                                ? Colors.white
+                                : lightGrey,
+                            titleFontWeight: FontWeight.normal,
+                            titleSize: 16,
+                          ))
+                        else
+                          Flexible(
+                              child: CustomTextWidget(
+                            pageTitle: itemName,
+                            titleColour: Colors.white,
+                            titleSize: 20,
+                            titleFontWeight: FontWeight.bold,
+                          ))
+                      ],
                     ),
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ouniee/constants/style.dart';
 import 'package:ouniee/pages/authenticate/sign_in/sign_in.dart';
-import 'package:ouniee/pages/authenticate/sign_up/sign_up_page_one.dart';
+import 'package:ouniee/pages/authenticate/sign_up/sign_up.dart';
 
 class Header extends StatefulWidget {
   final String landingPageTitle;
@@ -11,23 +12,26 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
-  final TextStyle _headerTextStyle = const TextStyle(
-      color: Colors.black87,
+  final TextStyle _headerTextStyle = TextStyle(
+      color: active,
       fontWeight: FontWeight.w600,
       letterSpacing: 1.05,
       fontSize: 18.0,
       fontFamily: "Mohave-Regular");
 
-  Color getStartedButtonColour = Colors.black;
-  Color getStartedButtonColour2 = Colors.black;
+  Color _getStartedButtonColour = active;
+  Color _getStartedButtonColour2 = active;
+  bool _isHoveringButton1 = false;
+  bool _isHoveringButton2 = false;
 
   @override
   Widget build(BuildContext context) {
     Size _screenSize = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: _screenSize.width / 7),
-      height: _screenSize.height / 10,
-      width: _screenSize.width / 1.5,
+      margin: EdgeInsets.symmetric(
+        vertical: _screenSize.height * 0.005,
+        horizontal: _screenSize.width * 0.05,
+      ),
       child: Row(
         //!MAIN ROW
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,7 +39,7 @@ class _HeaderState extends State<Header> {
         children: <Widget>[
           //!LEFT SIDE CONTAINER
           SizedBox(
-              width: _screenSize.width / 5,
+              width: _screenSize.width * 0.3,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,21 +51,23 @@ class _HeaderState extends State<Header> {
                     ),
                     InkWell(
                         child: Text(
-                      "FEATURES",
+                      "Features",
+                      textAlign: TextAlign.center,
                       style: _headerTextStyle,
                     )),
                     InkWell(
                         child: Text(
-                      "RESOURCES",
+                      "Resources",
+                      textAlign: TextAlign.center,
                       style: _headerTextStyle,
                     )),
                   ])),
 
           //!RIGHT SIDE CONTAINER
           SizedBox(
-              width: _screenSize.width / 6,
+              width: _screenSize.width * 0.25,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   //!LOGIN
@@ -69,10 +75,12 @@ class _HeaderState extends State<Header> {
                       onHover: (value) {
                         value
                             ? setState(() {
-                                getStartedButtonColour = Colors.blue.shade900;
+                                _isHoveringButton1 = value;
+                                _getStartedButtonColour = Colors.white;
                               })
                             : setState(() {
-                                getStartedButtonColour = Colors.black;
+                                _getStartedButtonColour = active;
+                                _isHoveringButton1 = false;
                               });
                       },
                       onTap: () {
@@ -81,17 +89,19 @@ class _HeaderState extends State<Header> {
                         ));
                       },
                       child: Container(
-                        width: 120.0,
-                        padding: const EdgeInsets.all(15.0),
+                        width: _screenSize.width * 0.1,
+                        padding: const EdgeInsets.all(12.0),
                         child: Text(
-                          "LOG IN",
+                          "Log In",
                           textAlign: TextAlign.center,
                           style: _headerTextStyle.copyWith(
-                            color: Colors.white,
+                            color: _isHoveringButton1 == true
+                                ? active
+                                : Colors.white,
                           ),
                         ),
                         decoration: BoxDecoration(
-                            color: getStartedButtonColour,
+                            color: _getStartedButtonColour,
                             borderRadius: BorderRadius.circular(30.0)),
                       )),
 
@@ -99,26 +109,32 @@ class _HeaderState extends State<Header> {
                   InkWell(
                       onTap: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (_) => const SignUpPageOne(),
+                          builder: (_) => const SignUp(),
                         ));
                       },
                       onHover: (value) {
                         value
                             ? setState(() {
-                                getStartedButtonColour2 = Colors.blue.shade900;
+                                _isHoveringButton2 = value;
+                                _getStartedButtonColour2 = Colors.white;
                               })
                             : setState(() {
-                                getStartedButtonColour2 = Colors.black;
+                                _getStartedButtonColour2 = active;
+                                _isHoveringButton2 = false;
                               });
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text("GET STARTED",
+                        width: _screenSize.width * 0.1,
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text("Get Started",
+                            textAlign: TextAlign.center,
                             style: _headerTextStyle.copyWith(
-                              color: Colors.white,
+                              color: _isHoveringButton2 == true
+                                  ? active
+                                  : Colors.white,
                             )),
                         decoration: BoxDecoration(
-                            color: getStartedButtonColour2,
+                            color: _getStartedButtonColour2,
                             borderRadius: BorderRadius.circular(30.0)),
                       )),
                 ],
