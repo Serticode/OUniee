@@ -1,24 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:ouniee/constants/style.dart';
+import 'package:ouniee/controllers/staff_data_controller.dart';
 import 'package:ouniee/widgets/custom_text_widget.dart';
 
-class EditStaffDetailsBioData extends StatelessWidget {
+class EditStaffDetailsBioData extends StatefulWidget {
   const EditStaffDetailsBioData({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    double callSize = 22.0;
-    Color callColour = dark.withOpacity(0.8);
-    Color responseColour = dark.withOpacity(0.6);
-    final _formKey = GlobalKey<FormState>();
+  State<EditStaffDetailsBioData> createState() =>
+      _EditStaffDetailsBioDataState();
+}
 
-    double responseSize = 20.0;
+class _EditStaffDetailsBioDataState extends State<EditStaffDetailsBioData> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _staffNameController = TextEditingController();
+  final TextEditingController _staffIdController = TextEditingController();
+  final TextEditingController _staffDepartmentController =
+      TextEditingController();
+  final TextEditingController _staffEmailController = TextEditingController();
+  final TextEditingController _staffContactController = TextEditingController();
+  final TextEditingController _staffAddressController = TextEditingController();
+
+  @override
+  void dispose() {
+    _staffAddressController.dispose();
+    _staffIdController.dispose();
+    _staffDepartmentController.dispose();
+    _staffEmailController.dispose();
+    _staffContactController.dispose();
+    _staffNameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double callSize = 16.0;
+    Color callColour = dark.withOpacity(0.8);
+    Size _screenSize = MediaQuery.of(context).size;
+
     MainAxisAlignment dataAlignment = MainAxisAlignment.spaceBetween;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
+        color: active.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Form(
@@ -30,13 +55,9 @@ class EditStaffDetailsBioData extends StatelessWidget {
             //!TITLE
             CustomTextWidget(
               pageTitle: "Edit Staff Bio Data",
-              titleSize: 26,
+              titleSize: 21,
               titleFontWeight: FontWeight.bold,
               titleColour: dark.withOpacity(0.5),
-            ),
-
-            const SizedBox(
-              height: 20.0,
             ),
 
             //!OTHER STAFF DETAILS
@@ -54,6 +75,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 6,
                 child: TextFormField(
+                  controller: _staffNameController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   maxLength: 120,
@@ -90,6 +112,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 6,
                 child: TextFormField(
+                  controller: _staffIdController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   maxLength: 24,
@@ -126,6 +149,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 6,
                 child: TextFormField(
+                  controller: _staffDepartmentController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   maxLength: 120,
@@ -162,6 +186,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 6,
                 child: TextFormField(
+                  controller: _staffEmailController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   maxLength: 120,
@@ -200,6 +225,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 6,
                 child: TextFormField(
+                  controller: _staffContactController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   maxLength: 120,
@@ -236,6 +262,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 6,
                 child: TextFormField(
+                  controller: _staffAddressController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   maxLength: 120,
@@ -260,7 +287,7 @@ class EditStaffDetailsBioData extends StatelessWidget {
 
             Container(
                 height: 60.0,
-                width: MediaQuery.of(context).size.width / 8,
+                width: _screenSize.width * 0.2,
                 padding:
                     const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
                 child: Align(
@@ -274,6 +301,25 @@ class EditStaffDetailsBioData extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')),
                           );
+
+                          String _fullName = _staffNameController.text;
+                          String _email = _staffEmailController.text;
+                          String _address = _staffAddressController.text;
+                          String _department = _staffDepartmentController.text;
+                          String _contact = _staffContactController.text;
+                          String _id = _staffIdController.text;
+
+                          StaffDataController.updateStaffBiodataDetails(
+                              fullName: _fullName,
+                              staffID: _id,
+                              staffEmail: _email,
+                              staffContact: _contact,
+                              staffAddress: _address,
+                              staffDepartment: _department);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('User Data Updated')),
+                          );
                         }
                       },
                       child: Row(
@@ -281,7 +327,6 @@ class EditStaffDetailsBioData extends StatelessWidget {
                           children: <Widget>[
                             Icon(
                               Icons.save_outlined,
-                              size: callSize,
                               color: light,
                             ),
                             Text(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ouniee/pages/applications/application_page.dart';
-import 'package:ouniee/pages/landing_page.dart';
+import 'package:ouniee/pages/applications/submitted_applications_page.dart';
 import 'package:ouniee/pages/overview/overview.dart';
-import 'package:ouniee/pages/staff_details/staff_details.dart';
 import 'package:ouniee/pages/staff_details/widgets/edit_staff_details.dart';
 import 'package:ouniee/routing/routes.dart';
 
@@ -14,6 +13,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const EditStaffDetailsPage());
     case applyForPromotionPageRoute:
       return _getPageRoute(const ApplicationsPage());
+    case promotionRequestPageRoute:
+      return _getPageRoute(const SubmittedApplications());
     case authenticationPageRoute:
       return _getPageRoute(const OverviewPage());
     default:

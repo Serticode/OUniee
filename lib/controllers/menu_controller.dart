@@ -29,6 +29,8 @@ class MenuController extends GetxController {
         return _customIcon(Icons.person_outlined, itemName);
       case applyForPromotion:
         return _customIcon(Icons.upcoming_outlined, itemName);
+      case promotionRequests:
+        return _customIcon(Icons.attachment_outlined, itemName);
       case authenticationPage:
         return _customIcon(Icons.exit_to_app, itemName);
       default:

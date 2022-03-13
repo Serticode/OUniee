@@ -7,38 +7,17 @@ class StaffDetailsBioData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double callSize = 22.0;
+    double callSize = 18.0;
     Color callColour = dark.withOpacity(0.8);
     Color responseColour = dark.withOpacity(0.6);
 
-    double responseSize = 20.0;
+    double responseSize = 16.0;
     MainAxisAlignment dataAlignment = MainAxisAlignment.spaceBetween;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
       decoration: BoxDecoration(
-        color: Colors.red, //Colors.purple.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26.withOpacity(0.2),
-            offset: const Offset(
-              1.0,
-              1.0,
-            ),
-            blurRadius: 90.0,
-            spreadRadius: 3.0,
-          ),
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.1),
-            offset: const Offset(
-              1.0,
-              1.0,
-            ),
-            blurRadius: 75.0,
-            spreadRadius: 1.0,
-          )
-        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,13 +26,9 @@ class StaffDetailsBioData extends StatelessWidget {
           //!TITLE
           CustomTextWidget(
             pageTitle: "Staff Bio Data",
-            titleSize: 26,
+            titleSize: 21,
             titleFontWeight: FontWeight.bold,
             titleColour: dark.withOpacity(0.5),
-          ),
-
-          const SizedBox(
-            height: 20.0,
           ),
 
           //!OTHER STAFF DETAILS

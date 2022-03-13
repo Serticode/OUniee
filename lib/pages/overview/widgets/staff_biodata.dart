@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ouniee/constants/style.dart';
+import 'package:ouniee/controllers/staff_data_controller.dart';
 import 'package:ouniee/widgets/custom_text_widget.dart';
 
 class StaffBioData extends StatelessWidget {
@@ -7,17 +8,17 @@ class StaffBioData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double callSize = 22.0;
-    Color callColour = dark.withOpacity(0.8);
-    Color responseColour = dark.withOpacity(0.6);
+    const double callSize = 21.0;
+    final Color callColour = dark.withOpacity(0.8);
+    final Color responseColour = dark.withOpacity(0.6);
 
-    double responseSize = 20.0;
+    const double responseSize = 18.0;
     MainAxisAlignment dataAlignment = MainAxisAlignment.spaceBetween;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
+        color: active.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Column(
@@ -27,13 +28,9 @@ class StaffBioData extends StatelessWidget {
           //!TITLE
           CustomTextWidget(
             pageTitle: "Staff Bio Data",
-            titleSize: 26,
+            titleSize: 21,
             titleFontWeight: FontWeight.bold,
             titleColour: dark.withOpacity(0.5),
-          ),
-
-          const SizedBox(
-            height: 20.0,
           ),
 
           //!OTHER STAFF DETAILS
@@ -49,7 +46,7 @@ class StaffBioData extends StatelessWidget {
 
             //! RESPONSE
             CustomTextWidget(
-              pageTitle: "Akujor Samuel O",
+              pageTitle: StaffDataController.usersData["staffFullName"],
               titleSize: responseSize,
               titleFontWeight: FontWeight.normal,
               titleColour: responseColour,
@@ -68,26 +65,7 @@ class StaffBioData extends StatelessWidget {
 
             //! RESPONSE
             CustomTextWidget(
-              pageTitle: "19/SCES/SE/1234",
-              titleSize: responseSize,
-              titleFontWeight: FontWeight.normal,
-              titleColour: responseColour,
-            ),
-          ]),
-
-          // ! STAFF DEPARTMENT
-          Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-            //!CALL
-            CustomTextWidget(
-              pageTitle: "School & Department: ",
-              titleSize: callSize,
-              titleFontWeight: FontWeight.bold,
-              titleColour: callColour,
-            ),
-
-            //! RESPONSE
-            CustomTextWidget(
-              pageTitle: "SCES - Software Engineering",
+              pageTitle: StaffDataController.usersData["staffId"],
               titleSize: responseSize,
               titleFontWeight: FontWeight.normal,
               titleColour: responseColour,
@@ -106,12 +84,131 @@ class StaffBioData extends StatelessWidget {
 
             //! RESPONSE
             CustomTextWidget(
-              pageTitle: "helpdeskforserticode@gmail.com",
+              pageTitle: StaffDataController.usersData["staffEmail"],
               titleSize: responseSize,
               titleFontWeight: FontWeight.normal,
               titleColour: responseColour,
             ),
           ]),
+
+          // ! STAFF DEPARTMENT
+          Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+            //!CALL
+            CustomTextWidget(
+              pageTitle: "School & Department: ",
+              titleSize: callSize,
+              titleFontWeight: FontWeight.bold,
+              titleColour: callColour,
+            ),
+
+            //! RESPONSE
+            CustomTextWidget(
+              pageTitle:
+                  StaffDataController.usersData["staffAssignedDepartment"],
+              titleSize: responseSize,
+              titleFontWeight: FontWeight.normal,
+              titleColour: responseColour,
+            ),
+          ]),
+
+          // ! STAFF QUALIFICATION.
+          Row(
+            mainAxisAlignment: dataAlignment,
+            children: <Widget>[
+              //!CALL
+              CustomTextWidget(
+                pageTitle: "Qualification: ",
+                titleSize: callSize,
+                titleFontWeight: FontWeight.bold,
+                titleColour: callColour,
+              ),
+
+              //! RESPONSE
+              Flexible(
+                child: CustomTextWidget(
+                  pageTitle: "   " +
+                      StaffDataController.usersData["staffQualification"],
+                  titleSize: responseSize,
+                  titleFontWeight: FontWeight.normal,
+                  titleColour: responseColour,
+                ),
+              ),
+            ],
+          ),
+
+          // ! STAFF LEVEL.
+          Row(
+            mainAxisAlignment: dataAlignment,
+            children: <Widget>[
+              //!CALL
+              CustomTextWidget(
+                pageTitle: "Staff Level: ",
+                titleSize: callSize,
+                titleFontWeight: FontWeight.bold,
+                titleColour: callColour,
+              ),
+
+              //! RESPONSE
+              Flexible(
+                child: CustomTextWidget(
+                  pageTitle: StaffDataController.usersData["currentStaffLevel"],
+                  titleSize: responseSize,
+                  titleFontWeight: FontWeight.normal,
+                  titleColour: responseColour,
+                ),
+              ),
+            ],
+          ),
+
+          // ! STAFF YEARS OF EXPERIENCE.
+          Row(
+            mainAxisAlignment: dataAlignment,
+            children: <Widget>[
+              //!CALL
+              CustomTextWidget(
+                pageTitle: "Years of Experience: ",
+                titleSize: callSize,
+                titleFontWeight: FontWeight.bold,
+                titleColour: callColour,
+              ),
+
+              //! RESPONSE
+              Flexible(
+                child: CustomTextWidget(
+                  pageTitle:
+                      "   " + StaffDataController.usersData["staffExperience"],
+                  titleSize: responseSize,
+                  titleFontWeight: FontWeight.normal,
+                  titleColour: responseColour,
+                ),
+              ),
+            ],
+          ),
+
+          // ! STAFF PUBLICATIONS.
+          Row(
+            mainAxisAlignment: dataAlignment,
+            children: <Widget>[
+              //!CALL
+              CustomTextWidget(
+                pageTitle: "List of Publications: ",
+                titleSize: callSize,
+                titleFontWeight: FontWeight.bold,
+                titleColour: callColour,
+              ),
+
+              //! RESPONSE
+              Flexible(
+                child: CustomTextWidget(
+                  pageTitle:
+                      "   " + StaffDataController.usersData["staffPublication"],
+                  titleSize: responseSize,
+                  titleFontWeight: FontWeight.normal,
+                  titleColour: responseColour,
+                ),
+              ),
+            ],
+          ),
 
           // ! STAFF CONTACT
           Row(mainAxisAlignment: dataAlignment, children: <Widget>[
@@ -125,7 +222,7 @@ class StaffBioData extends StatelessWidget {
 
             //! RESPONSE
             CustomTextWidget(
-              pageTitle: "+2349030779735",
+              pageTitle: StaffDataController.usersData["staffMobileContact"],
               titleSize: responseSize,
               titleFontWeight: FontWeight.normal,
               titleColour: responseColour,
@@ -133,23 +230,26 @@ class StaffBioData extends StatelessWidget {
           ]),
 
           // ! STAFF HOME ADDRESS.
-          Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-            //!CALL
-            CustomTextWidget(
-              pageTitle: "Residential Address: ",
-              titleSize: callSize,
-              titleFontWeight: FontWeight.bold,
-              titleColour: callColour,
-            ),
+          Row(
+            mainAxisAlignment: dataAlignment,
+            children: <Widget>[
+              //!CALL
+              CustomTextWidget(
+                pageTitle: "Residential Address: ",
+                titleSize: callSize,
+                titleFontWeight: FontWeight.bold,
+                titleColour: callColour,
+              ),
 
-            //! RESPONSE
-            CustomTextWidget(
-              pageTitle: "1233 Serti Drive BLVD, Toronto, CA.",
-              titleSize: responseSize,
-              titleFontWeight: FontWeight.normal,
-              titleColour: responseColour,
-            ),
-          ]),
+              //! RESPONSE
+              CustomTextWidget(
+                pageTitle: StaffDataController.usersData["staffHouseAddress"],
+                titleSize: responseSize,
+                titleFontWeight: FontWeight.normal,
+                titleColour: responseColour,
+              ),
+            ],
+          ),
         ],
       ),
     );

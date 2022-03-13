@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ouniee/constants/controllers.dart';
 import 'package:ouniee/constants/style.dart';
-import 'package:ouniee/pages/landing_page.dart';
-import 'package:ouniee/services/auth/auth.dart';
+import 'package:ouniee/controllers/auth_controller.dart';
 import 'package:ouniee/widgets/custom_text_widget.dart';
 import 'package:ouniee/widgets/responsive_widget.dart';
 
 AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
-    {String? userName}) {
-  final _theAuthServiceInstance = AuthService();
-
+    {String? userName, String? userEmail}) {
   return AppBar(
     leading: ResponsiveWidget.isSmallScreen(context)
         ? IconButton(
@@ -32,13 +28,9 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
         //!APP BAR TITLE
         CustomTextWidget(
           pageTitle: "Ouniee",
-          titleSize: 22.0,
+          titleSize: 18.0,
           titleColour: Colors.grey.shade700,
           titleFontWeight: FontWeight.w600,
-        ),
-
-        const SizedBox(
-          width: 20.0,
         ),
 
         //!MIDDLE SPACE
@@ -47,13 +39,13 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
             child: ResponsiveWidget.isSmallScreen(context)
                 ? CustomTextWidget(
                     pageTitle: "Dashboard",
-                    titleSize: 18.0,
+                    titleSize: 16.0,
                     titleColour: Colors.grey.shade700,
                     titleFontWeight: FontWeight.w600,
                   )
                 : CustomTextWidget(
                     pageTitle: "Your Dashboard",
-                    titleSize: 22.0,
+                    titleSize: 18.0,
                     titleColour: Colors.grey.shade700,
                     titleFontWeight: FontWeight.w600,
                   ),
@@ -64,20 +56,13 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            const SizedBox(width: 20.0),
             //! LOGOUT BUTTON
             IconButton(
               onPressed: () {
-                _theAuthServiceInstance.signOut().whenComplete(() {
-                  Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (context) {
-                    return const LandingPage();
-                  }));
-                });
+                AuthController.getXSignOut();
               },
               icon: FaIcon(
                 FontAwesomeIcons.signOutAlt,
-                size: 28.0,
                 color: Colors.black87.withOpacity(0.8),
               ),
             ),
@@ -87,10 +72,11 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
             Stack(
               children: <Widget>[
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    debugPrint("NOTIFICATION ICON PRESSED");
+                  },
                   icon: FaIcon(
                     FontAwesomeIcons.bell,
-                    size: 28.0,
                     color: Colors.black87.withOpacity(0.8),
                   ),
                 ),
@@ -103,7 +89,6 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
                       padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
                           color: active,
-                          //shape: BoxShape.circle,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(color: light, width: 2)),
                     )),
@@ -122,7 +107,7 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
             ResponsiveWidget.isSmallScreen(context)
                 ? const SizedBox(width: 1)
                 : CustomTextWidget(
-                    pageTitle: "Akujor, Samuel O",
+                    pageTitle: userName ?? "",
                     titleSize: 18.0,
                     titleColour: Colors.grey.shade700,
                     titleFontWeight: FontWeight.w600,
@@ -134,7 +119,6 @@ AppBar customAppBar(BuildContext context, GlobalKey<ScaffoldState> key,
               onPressed: () {},
               icon: FaIcon(
                 FontAwesomeIcons.user,
-                size: 28.0,
                 color: Colors.black87.withOpacity(0.8),
               ),
             ),
