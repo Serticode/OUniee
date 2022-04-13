@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:ouniee/constants/firebase.dart';
 import 'package:ouniee/controllers/staff_data_controller.dart';
@@ -42,6 +45,79 @@ class SubmittedApplicationsController extends GetxController {
       "staffPublication": StaffDataController.usersData["staffPublication"],
       "staffQualification": StaffDataController.usersData["staffQualification"],
     });
+  }
+
+  static Future<bool> applicationDecider(
+      {required String staffEmail,
+      required String staffCoverLetter,
+      required String leadershipSkillRating,
+      required File theAttachedFile}) async {
+    //! BOOL TO BE RETURNED.
+    bool promotedOrNot;
+
+    //!PULL STAFF DETAILS
+    DocumentSnapshot<Map<String, dynamic>> staffData =
+        await firebaseFirestore.collection("User Data").doc(staffEmail).get();
+
+    //! GET STAFF CURRENT EXPERIENCE
+    String currentStaffExperience = staffData.data()!["staffExperience"];
+
+    //! GET STAFF CURRENT PUBLICATION
+    String currentStaffPublication = staffData.data()!["staffPublication"];
+
+    //! STAFF COVER LETTER
+    //String coverLetter = staffCoverLetter;
+
+    //! FIND CURRENT STAFF LEVEL INDEX
+    int currentLevelIndex = StaffLevelController.attainableStaffLevels
+        .indexOf(staffData.data()!["currentStaffLevel"]);
+
+    //! ASSIGN NEXT LEVEL INDEX
+    int nextLevelIndex = ++currentLevelIndex;
+
+    //! GET REQUIREMENTS FOR THE POSITION APPLIED FOR.
+    int noOfExperienceYearsForNextLevel =
+        StaffLevelController.numberOfExpectedExperienceYears[nextLevelIndex];
+
+    int numberOfPublicationsForNextLevel =
+        StaffLevelController.numberOfExpectedStaffPublications[nextLevelIndex];
+
+    int expectedLeadershipRating =
+        StaffLevelController.expectedLeadershipSkillRating[nextLevelIndex];
+
+    //! STAFF FILE UPLOAD
+    File? attachedFile = theAttachedFile;
+
+    //! DECIDER
+    //!CONVERT CURRENT STAFF VALUES TO INT FROM STRING STORED TYPE
+    int staffExperienceInYears = int.parse(currentStaffExperience);
+
+    //! CURRENT STAFF PUBLICATION IN INT.
+    List<String> thePublications = currentStaffPublication.split(",");
+    int staffPublicationInInt = thePublications.length;
+    debugPrint(staffPublicationInInt.toString());
+
+    //! LEADERSHIP SKILL RATING IN INT.
+    int _leadershipSkillRating = int.parse(leadershipSkillRating);
+
+    //! IF THE CURRENT STAFF VALUES, MEET THE APPLIED LEVEL REQUIREMENTS, PROMOTE
+    if ((staffExperienceInYears >= noOfExperienceYearsForNextLevel) &&
+        (staffPublicationInInt >= numberOfPublicationsForNextLevel) &&
+        (_leadershipSkillRating >= expectedLeadershipRating) &&
+        (attachedFile != null)) {
+      promotedOrNot = true;
+      applicationApproved(staffEmail: staffEmail);
+
+      SubmittedApplicationsController.submitStaffApplication(
+          theCriteriaMet: StaffLevelController.criteria[nextLevelIndex],
+          thePositionAppliedFor:
+              StaffLevelController.attainableStaffLevels[nextLevelIndex]);
+    } else {
+      promotedOrNot = false;
+      applicationDenied(staffEmail: staffEmail);
+    }
+
+    return promotedOrNot;
   }
 
   //! CHECK IF STAFF HAS APPLIED FOR JOB AND SHOW THE JOB LISTING.
@@ -105,7 +181,7 @@ class SubmittedApplicationsController extends GetxController {
         StaffLevelController.attainableStaffLevels[nextLevelIndex];
 
     //! CHANGE STAFF LEVEL
-    if (nextLevelIndex >= 4) {
+    if (nextLevelIndex >= 5) {
       firebaseFirestore.collection("User Data").doc(staffEmail).update({
         "isAdmin": true,
         "currentStaffLevel": promotedLevel,

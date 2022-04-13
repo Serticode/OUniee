@@ -20,10 +20,6 @@ class _EditStaffDetailsLectureDataState
   List<dynamic>? _coursesStaffTeach = [];
   @override
   void didChangeDependencies() {
-    /* List? /* <Map<String, dynamic>> */ theCourses =
-        StaffDataController.usersData["coursesStaffTeach"];
-    StaffDataController.usersData["coursesStaffTeach"];
-     */
     setState(() {
       _coursesStaffTeach = StaffDataController.usersData["coursesStaffTeach"];
     });
@@ -60,7 +56,7 @@ class _EditStaffDetailsLectureDataState
             child: _isAdmin
                 ? Container(
                     margin: const EdgeInsets.all(10.0),
-                    padding: const EdgeInsets.all(21.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Center(
                       child: CustomTextWidget(
                         pageTitle: "Professors do not take courses",
@@ -87,7 +83,7 @@ class _EditStaffDetailsLectureDataState
                             ? Container(
                                 margin: EdgeInsets.only(
                                     top: MediaQuery.of(context).size.height *
-                                        0.2),
+                                        0.05),
                                 alignment: Alignment.center,
                                 child: Center(
                                   child: CustomTextWidget(

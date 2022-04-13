@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ouniee/constants/controllers.dart';
 import 'package:ouniee/constants/style.dart';
 import 'package:ouniee/controllers/staff_data_controller.dart';
+import 'package:ouniee/pages/authenticate/authentication.dart';
 import 'package:ouniee/routing/routes.dart';
 import 'package:ouniee/widgets/custom_text_widget.dart';
 import 'package:ouniee/widgets/responsive_widget.dart';
@@ -14,9 +15,6 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
-
-    //!FETCH STAFF DATA FROM STATIC HOLDER
-    final bool isStaffAdmin = StaffDataController.usersData["isAdmin"];
 
     return Container(
       color: light,
@@ -51,41 +49,22 @@ class SideMenu extends StatelessWidget {
             ),
           Column(
             mainAxisSize: MainAxisSize.min,
-            children: isStaffAdmin == true
-                ? sideMenuItemRoutesForAdmin
-                    .map((item) => SideMenuItem(
-                        itemName: item.name,
-                        onTap: () {
-                          if (item.route == authenticationPageRoute) {
-                            Get.offAllNamed(authenticationPageRoute);
-                            menuController.changeActiveItemTo(overviewPage);
-                          }
-                          if (!menuController.isActive(item.name)) {
-                            menuController.changeActiveItemTo(item.name);
-                            if (ResponsiveWidget.isSmallScreen(context))
-                              // ignore: curly_braces_in_flow_control_structures
-                              Get.back();
-                            navigationController.navigateTo(item.route);
-                          }
-                        }))
-                    .toList()
-                : sideMenuItemRoutes
-                    .map((item) => SideMenuItem(
-                        itemName: item.name,
-                        onTap: () {
-                          if (item.route == authenticationPageRoute) {
-                            Get.offAllNamed(authenticationPageRoute);
-                            menuController.changeActiveItemTo(overviewPage);
-                          }
-                          if (!menuController.isActive(item.name)) {
-                            menuController.changeActiveItemTo(item.name);
-                            if (ResponsiveWidget.isSmallScreen(context))
-                              // ignore: curly_braces_in_flow_control_structures
-                              Get.back();
-                            navigationController.navigateTo(item.route);
-                          }
-                        }))
-                    .toList(),
+            children: sideMenuItemRoutes
+                .map((item) => SideMenuItem(
+                    itemName: item.name,
+                    onTap: () {
+                      if (item.route == authenticationPageRoute) {
+                        Get.offAll(const AuthenticationPage());
+                      }
+                      if (!menuController.isActive(item.name)) {
+                        menuController.changeActiveItemTo(item.name);
+                        if (ResponsiveWidget.isSmallScreen(context))
+                          // ignore: curly_braces_in_flow_control_structures
+                          Get.back();
+                        navigationController.navigateTo(item.route);
+                      }
+                    }))
+                .toList(),
           )
         ],
       ),

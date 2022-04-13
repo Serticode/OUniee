@@ -23,6 +23,7 @@ class CustomTextWidget extends StatelessWidget {
         color: titleColour,
         fontSize: titleSize,
         fontWeight: titleFontWeight,
+        decoration: TextDecoration.none,
       ),
     );
   }

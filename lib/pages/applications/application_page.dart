@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ouniee/constants/controllers.dart';
+import 'package:ouniee/constants/firebase.dart';
 import 'package:ouniee/constants/style.dart';
 import 'package:ouniee/controllers/staff_data_controller.dart';
 import 'package:ouniee/controllers/staff_level_controller.dart';
@@ -20,81 +21,60 @@ class ApplicationsPage extends StatefulWidget {
 }
 
 class _ApplicationsPageState extends State<ApplicationsPage> {
-  List<String> selectedPosition = [];
   List<String> selectedCriteria = [];
   final List<String> _criteriaList = StaffLevelController.availableCriteria(
       theCurrentStaffLevel: StaffDataController.usersData["currentStaffLevel"]);
+  String? attachedFileName;
+  File? theAttachedFile;
+  final TextEditingController _coverLetterController = TextEditingController();
+  final TextEditingController _leadershipSkillController =
+      TextEditingController();
 
-  final List<String> _jobPositionsList =
-      StaffLevelController.availablePositionDecider(
-          theCurrentStaffLevel:
-              StaffDataController.usersData["currentStaffLevel"]);
+  final _formKey = GlobalKey<FormState>();
 
-  bool _didStaffApply = false;
+  bool? _isStaffPromoted;
 
   @override
   void didChangeDependencies() async {
-    await SubmittedApplicationsController.didStaffApply() == true
-        ? setState(() => _didStaffApply = true)
-        : setState(() => _didStaffApply = false);
+    _isStaffPromoted;
     super.didChangeDependencies();
   }
 
-  //! this function will build and return the choice list
-  _buildPositionChoiceList({required List<String>? itemsToBuild}) {
-    List<Widget> choices = [];
-    for (var item in itemsToBuild!) {
-      choices.add(
-        ChoiceChip(
-          padding: const EdgeInsets.all(21.0),
-          elevation: 4.0,
-          pressElevation: 8.0,
-          backgroundColor: active.withOpacity(0.1),
-          label: CustomTextWidget(
-            pageTitle: item,
-            titleSize: 14.0,
-            titleFontWeight: FontWeight.bold,
-            titleColour: active,
-          ),
-          selectedColor: Colors.white,
-          selected: selectedPosition.contains(item),
-          onSelected: (selected) {
-            setState(() {
-              selectedPosition.contains(item)
-                  ? selectedPosition.remove(item)
-                  : selectedPosition.add(item);
-            });
-          },
-        ),
-      );
-    }
-    return choices;
+  @override
+  void dispose() {
+    _coverLetterController.dispose();
+    _leadershipSkillController.dispose();
+    super.dispose();
   }
 
   _buildCriteriaChoiceList({required List<String>? itemsToBuild}) {
     List<Widget> choices = [];
     for (var item in itemsToBuild!) {
       choices.add(
-        ChoiceChip(
-          padding: const EdgeInsets.all(21.0),
-          elevation: 4.0,
-          pressElevation: 8.0,
-          backgroundColor: active.withOpacity(0.1),
-          label: CustomTextWidget(
-            pageTitle: item,
-            titleSize: 14.0,
-            titleFontWeight: FontWeight.bold,
-            titleColour: active,
+        Container(
+          color: Colors.transparent,
+          margin: const EdgeInsets.all(21.0),
+          child: ChoiceChip(
+            padding: const EdgeInsets.all(21.0),
+            elevation: 4.0,
+            pressElevation: 8.0,
+            backgroundColor: active.withOpacity(0.1),
+            label: CustomTextWidget(
+              pageTitle: item,
+              titleSize: 14.0,
+              titleFontWeight: FontWeight.bold,
+              titleColour: active,
+            ),
+            selectedColor: Colors.white,
+            selected: selectedCriteria.contains(item),
+            onSelected: (selected) {
+              setState(() {
+                selectedCriteria.contains(item)
+                    ? selectedCriteria.remove(item)
+                    : selectedCriteria.add(item);
+              });
+            },
           ),
-          selectedColor: Colors.white,
-          selected: selectedCriteria.contains(item),
-          onSelected: (selected) {
-            setState(() {
-              selectedCriteria.contains(item)
-                  ? selectedCriteria.remove(item)
-                  : selectedCriteria.add(item);
-            });
-          },
         ),
       );
     }
@@ -128,278 +108,472 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
         ),
 
         //!CONTENTS
-        _didStaffApply
+
+        //! IS PROMOTION DECLINED?
+        (_isStaffPromoted != null && _isStaffPromoted == false)
             ? Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: _screenSize.width * 0.1),
-                  child: Center(
-                    child: CustomTextWidget(
-                      pageTitle: "Your Application is being REVIEWED!",
-                      titleSize: 21,
-                      titleFontWeight: FontWeight.bold,
-                      titleColour: dark.withOpacity(0.8),
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CustomTextWidget(
+                        pageTitle: "Your Application is Declined!",
+                        titleSize: 21,
+                        titleFontWeight: FontWeight.bold,
+                        titleColour: dark.withOpacity(0.8),
+                      ),
+                      const SizedBox(
+                        height: 40.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          //! STATEMENT
+                          CustomTextWidget(
+                            pageTitle:
+                                "Your application has been declined; You have NOT been PROMOTED!",
+                            titleSize: 18,
+                            titleFontWeight: FontWeight.w600,
+                            titleColour: dark.withOpacity(0.9),
+                          ),
+
+                          //!BUTTON
+                          ElevatedButton(
+                            onPressed: () {
+                              SubmittedApplicationsController
+                                  .acknowledgeApplicationStatus();
+                              setState(() {
+                                _isStaffPromoted = null;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: active,
+                              padding: const EdgeInsets.all(21.0),
+                            ),
+                            child: const CustomTextWidget(
+                              pageTitle: "Acknowledge",
+                              titleSize: 21,
+                              titleFontWeight: FontWeight.normal,
+                              titleColour: Colors.white,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
               )
-            : Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 5.0, horizontal: 20.0),
-                  width: _screenSize.width * 0.8,
-                  decoration: BoxDecoration(
-                      color: active.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        //!INSTRUCTIONS
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
-                          child: CustomTextWidget(
-                            pageTitle: "Basic Requirements",
+            :
+
+            //! IS PROMOTION APPROVED?
+            (_isStaffPromoted != null && _isStaffPromoted == true)
+                ? Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(left: _screenSize.width * 0.1),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CustomTextWidget(
+                            pageTitle: "Your Application is Approved!",
                             titleSize: 21,
                             titleFontWeight: FontWeight.bold,
                             titleColour: dark.withOpacity(0.8),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
-                          child: CustomTextWidget(
-                            pageTitle:
-                                "Select the options that apply to you.    What criteria do you meet?",
-                            titleSize: 16,
-                            titleFontWeight: FontWeight.w600,
-                            titleColour: dark.withOpacity(0.7),
+                          const SizedBox(
+                            height: 40.0,
                           ),
-                        ),
-
-                        //!CHOICES
-                        Container(
-                          height: _screenSize.height * 0.1,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: lightGrey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: _buildCriteriaChoiceList(
-                                itemsToBuild: _criteriaList),
-                          ),
-                        ),
-
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
-                          child: CustomTextWidget(
-                            pageTitle: "What position are you applying for? ",
-                            titleSize: 16,
-                            titleFontWeight: FontWeight.w600,
-                            titleColour: dark.withOpacity(0.7),
-                          ),
-                        ),
-
-                        Container(
-                          height: _screenSize.height * 0.1,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: lightGrey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: _buildPositionChoiceList(
-                                itemsToBuild: _jobPositionsList),
-                          ),
-                        ),
-
-                        //!COVER LETTER SECTION
-
-                        //!INSTRUCTION
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
-                          child: CustomTextWidget(
-                            pageTitle: "Type an optional cover letter.",
-                            titleSize: 16,
-                            titleFontWeight: FontWeight.w600,
-                            titleColour: dark.withOpacity(0.7),
-                          ),
-                        ),
-
-                        //!COVER LETTER TEXT BOX
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
-                          padding: const EdgeInsets.all(40.0),
-                          height: _screenSize.height * 0.3,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: active.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 15,
-                            maxLength: 10000,
-                            style: TextStyle(
-                                color: dark,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16.0),
-                            decoration: InputDecoration(
-                              hintText: "Type an optional cover letter.",
-                              contentPadding: const EdgeInsets.all(20.0),
-                              hintStyle: TextStyle(
-                                color: dark.withOpacity(0.8),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 21.0,
+                            children: <Widget>[
+                              //! STATEMENT
+                              CustomTextWidget(
+                                pageTitle:
+                                    "Your application has been approved; You have been PROMOTED!",
+                                titleSize: 18,
+                                titleFontWeight: FontWeight.w600,
+                                titleColour: dark.withOpacity(0.9),
                               ),
-                              fillColor: Colors.white,
-                              border: InputBorder.none,
-                            ),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return "Email cannot be empty";
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
-                        ),
 
-                        //!UPLOAD DOCUMENT
-                        Container(
-                          height: _screenSize.height * 0.1,
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6.0),
-                            color: active.withOpacity(0.1),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              fetchFileAttachment();
-                            },
-                            onHover: (value) {},
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2.0,
-                                  color: lightGrey,
-                                  style: BorderStyle.solid,
+                              //!BUTTON
+                              ElevatedButton(
+                                onPressed: () {
+                                  SubmittedApplicationsController
+                                      .acknowledgeApplicationStatus();
+                                  setState(() {
+                                    _isStaffPromoted = null;
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: active,
+                                  padding: const EdgeInsets.all(21.0),
                                 ),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                child: const CustomTextWidget(
+                                  pageTitle: "Acknowledge",
+                                  titleSize: 21,
+                                  titleFontWeight: FontWeight.normal,
+                                  titleColour: Colors.white,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                :
+
+                //! REGULAR VIEW
+                Expanded(
+                    child: StaffDataController.usersData["isAdmin"]
+                        ? Container(
+                            margin:
+                                EdgeInsets.only(left: _screenSize.width * 0.1),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CustomTextWidget(
+                                  pageTitle: "You are a Professor",
+                                  titleSize: 21,
+                                  titleFontWeight: FontWeight.bold,
+                                  titleColour: dark.withOpacity(0.8),
+                                ),
+                                const SizedBox(
+                                  height: 40.0,
+                                ),
+
+                                //! STATEMENT
+                                CustomTextWidget(
+                                  pageTitle:
+                                      "You are already at the peak Tutor position. You cannot apply further.",
+                                  titleSize: 18,
+                                  titleFontWeight: FontWeight.w600,
+                                  titleColour: dark.withOpacity(0.9),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            margin: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 20.0),
+                            width: _screenSize.width * 0.8,
+                            decoration: BoxDecoration(
+                                color: active.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: SingleChildScrollView(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.attach_file_outlined,
-                                    size: 32,
-                                    color: dark.withOpacity(0.9),
+                                  //!INSTRUCTIONS
+                                  Container(
+                                    margin: const EdgeInsets.all(8.0),
+                                    child: CustomTextWidget(
+                                      pageTitle: "Basic Requirements",
+                                      titleSize: 21,
+                                      titleFontWeight: FontWeight.bold,
+                                      titleColour: dark.withOpacity(0.8),
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    width: 20.0,
+                                  Container(
+                                    margin: const EdgeInsets.all(8.0),
+                                    child: CustomTextWidget(
+                                      pageTitle:
+                                          "Select the options that apply to you.    What criteria do you meet?",
+                                      titleSize: 16,
+                                      titleFontWeight: FontWeight.w600,
+                                      titleColour: dark.withOpacity(0.7),
+                                    ),
                                   ),
-                                  CustomTextWidget(
-                                    pageTitle: "Attach Credentials",
-                                    titleSize: 20,
-                                    titleFontWeight: FontWeight.normal,
-                                    titleColour: dark.withOpacity(0.9),
+
+                                  //!CHOICES
+                                  Container(
+                                      height: _screenSize.height * 0.1,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: lightGrey.withOpacity(0.1),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                      ),
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: _buildCriteriaChoiceList(
+                                            itemsToBuild: _criteriaList),
+                                      )),
+
+                                  Container(
+                                    margin: const EdgeInsets.all(8.0),
+                                    child: CustomTextWidget(
+                                      pageTitle:
+                                          "Rate your Leadership skill on a scale of 1 - 10.",
+                                      titleSize: 16,
+                                      titleFontWeight: FontWeight.w600,
+                                      titleColour: dark.withOpacity(0.7),
+                                    ),
+                                  ),
+
+                                  Container(
+                                      height: _screenSize.height * 0.07,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: lightGrey.withOpacity(0.1),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Form(
+                                          key: _formKey,
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            controller:
+                                                _leadershipSkillController,
+                                            style: TextStyle(
+                                                color: dark,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.0),
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  "Leadership skill rating - scale 1 - 10",
+                                              contentPadding:
+                                                  const EdgeInsets.all(20.0),
+                                              hintStyle: TextStyle(
+                                                color: dark.withOpacity(0.8),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 21.0,
+                                              ),
+                                              fillColor: Colors.white,
+                                              border: InputBorder.none,
+                                            ),
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return "Leadership skill rating cannot be empty";
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                          )) /* ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: _buildPositionChoiceList(
+                                            itemsToBuild: _jobPositionsList),
+                                      ) */
+                                      ),
+
+                                  //!COVER LETTER SECTION
+
+                                  //!INSTRUCTION
+                                  Container(
+                                    margin: const EdgeInsets.all(8.0),
+                                    child: CustomTextWidget(
+                                      pageTitle:
+                                          "Type an optional cover letter.",
+                                      titleSize: 16,
+                                      titleFontWeight: FontWeight.w600,
+                                      titleColour: dark.withOpacity(0.7),
+                                    ),
+                                  ),
+
+                                  //!COVER LETTER TEXT BOX
+                                  Container(
+                                    margin: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(40.0),
+                                    height: _screenSize.height * 0.3,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: active.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.multiline,
+                                      controller: _coverLetterController,
+                                      maxLines: 15,
+                                      maxLength: 10000,
+                                      style: TextStyle(
+                                          color: dark,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16.0),
+                                      decoration: InputDecoration(
+                                        hintText:
+                                            "Type an optional cover letter.",
+                                        contentPadding:
+                                            const EdgeInsets.all(20.0),
+                                        hintStyle: TextStyle(
+                                          color: dark.withOpacity(0.8),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 21.0,
+                                        ),
+                                        fillColor: Colors.white,
+                                        border: InputBorder.none,
+                                      ),
+                                      validator: (val) {
+                                        if (val!.isEmpty) {
+                                          return "Email cannot be empty";
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+
+                                  //!UPLOAD DOCUMENT
+                                  Container(
+                                    height: _screenSize.height * 0.1,
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(10.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6.0),
+                                      color: active.withOpacity(0.1),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await fetchFileAttachment();
+                                      },
+                                      onHover: (value) {},
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 2.0,
+                                            color: lightGrey,
+                                            style: BorderStyle.solid,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.attach_file_outlined,
+                                              size: 32,
+                                              color: dark.withOpacity(0.9),
+                                            ),
+                                            const SizedBox(
+                                              width: 20.0,
+                                            ),
+                                            CustomTextWidget(
+                                              pageTitle:
+                                                  attachedFileName != null
+                                                      ? attachedFileName!
+                                                      : "Attach Credentials",
+                                              titleSize: 20,
+                                              titleFontWeight:
+                                                  FontWeight.normal,
+                                              titleColour:
+                                                  dark.withOpacity(0.9),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  //!SUBMIT
+                                  Container(
+                                    height: _screenSize.height * 0.1,
+                                    width: _screenSize.width * 0.15,
+                                    padding: const EdgeInsets.all(10.0),
+                                    margin: const EdgeInsets.only(top: 12.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(21.0),
+                                      color: active.withOpacity(0.1),
+                                    ),
+                                    child: ElevatedButton(
+                                      onPressed: (() async {
+                                        String _coverLetter =
+                                            _coverLetterController.text;
+                                        _coverLetterController.clear();
+                                        String _leadershipSkillRating =
+                                            _leadershipSkillController.text;
+                                        _leadershipSkillController.clear();
+
+                                        if (selectedCriteria.isNotEmpty) {
+                                          bool isPromoted =
+                                              await SubmittedApplicationsController
+                                                  .applicationDecider(
+                                                      staffEmail: auth
+                                                          .currentUser!.email!,
+                                                      staffCoverLetter:
+                                                          _coverLetter,
+                                                      leadershipSkillRating:
+                                                          _leadershipSkillRating,
+                                                      theAttachedFile:
+                                                          theAttachedFile!);
+
+                                          setState(() {
+                                            _isStaffPromoted = isPromoted;
+                                          });
+
+                                          Get.snackbar(
+                                            "Application Submitted!",
+                                            "Your application to be promoted is being reviewed",
+                                            snackPosition: SnackPosition.BOTTOM,
+                                          );
+
+                                          //! SHOW PROMOTION DETAILS
+                                          isPromoted
+                                              ? Get.snackbar(
+                                                  "Promoted",
+                                                  "Your application to be promoted is Successful",
+                                                  duration: const Duration(
+                                                      seconds: 4),
+                                                  snackPosition:
+                                                      SnackPosition.BOTTOM,
+                                                )
+                                              : Get.snackbar(
+                                                  "Declined",
+                                                  "Your application to be promoted has been Declined",
+                                                  duration: const Duration(
+                                                      seconds: 4),
+                                                  snackPosition:
+                                                      SnackPosition.BOTTOM,
+                                                );
+                                        } else if (selectedCriteria.isEmpty) {
+                                          Get.snackbar("Empty Criteria!",
+                                              "Select one Criteria you meet",
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              duration:
+                                                  const Duration(seconds: 6));
+                                        }
+
+                                        selectedCriteria.clear();
+                                      }),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.white),
+                                      child: CustomTextWidget(
+                                        pageTitle: "Submit Application",
+                                        titleSize: 21,
+                                        titleFontWeight: FontWeight.w600,
+                                        titleColour: active,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ),
-
-                        //!SUBMIT
-                        Container(
-                          height: _screenSize.height * 0.1,
-                          width: _screenSize.width * 0.15,
-                          padding: const EdgeInsets.all(10.0),
-                          margin: const EdgeInsets.only(top: 12.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(21.0),
-                            color: active.withOpacity(0.1),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: (() {
-                              if (selectedCriteria.isNotEmpty &&
-                                  selectedPosition.isNotEmpty) {
-                                SubmittedApplicationsController
-                                    .submitStaffApplication(
-                                        theCriteriaMet: selectedCriteria.first,
-                                        thePositionAppliedFor:
-                                            selectedPosition.first);
-
-                                Get.snackbar(
-                                  "Application Submitted!",
-                                  "Your application to be promoted is being reviewed",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                );
-                              } else if (selectedCriteria.isEmpty ||
-                                  selectedPosition.isEmpty) {
-                                Get.snackbar("Criteria and Position!",
-                                    "Select one Criteria you meet and the Position you are applying for",
-                                    snackPosition: SnackPosition.BOTTOM,
-                                    duration: const Duration(seconds: 6));
-                              }
-
-                              setState(() {
-                                _didStaffApply = true;
-                              });
-
-                              selectedCriteria.clear();
-                              selectedPosition.clear();
-                            }),
-                            style:
-                                ElevatedButton.styleFrom(primary: Colors.white),
-                            child: CustomTextWidget(
-                              pageTitle: "Submit Application",
-                              titleSize: 21,
-                              titleFontWeight: FontWeight.w600,
-                              titleColour: active,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
-              ),
       ],
     );
   }
 
   fetchFileAttachment() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowMultiple: true,
-      allowedExtensions: [
-        'docx',
-        'pdf',
-        'doc',
-        'txt',
-      ],
-    );
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    File? theFile;
 
     if (result != null) {
-      List<File> files = [];
-      for (var item in result.files) {
-        Uint8List? fileBytes = item.bytes; //result.files.first.bytes;
+      Uint8List? fileBytes = result.files.first.bytes;
+      String fileName = result.files.first.name;
+      theFile = File.fromRawPath(fileBytes!);
 
-        files.add(File.fromRawPath(fileBytes!));
-      }
-
-      //= result.paths.map((path) => File(path!)).toList();
-      debugPrint("THE FILES INCLUDE \n\n $files");
-    } else {
-      // User canceled the picker
+      setState(() {
+        attachedFileName = fileName;
+        theAttachedFile = theFile;
+      });
     }
   }
 }

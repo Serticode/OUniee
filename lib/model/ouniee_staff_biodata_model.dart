@@ -16,7 +16,6 @@ class OUnieeStaffBioDataModel {
   String? staffPublication;
   String? staffExperience;
   List<Map<String, dynamic>>? coursesStaffTeach;
-  //List<OUnieeStaffCoursesModel>? coursesStaffTeach;
 
   OUnieeStaffBioDataModel({
     this.isAdmin,
@@ -66,7 +65,6 @@ class OUnieeStaffBioDataModel {
     map['staffPublication'] = staffPublication ?? "defaultStaffPublication";
     map['staffQualification'] =
         staffQualification ?? "defaultStaffQualification";
-    //map['coursesStaffTeach'] = coursesStaffTeach ?? "defaultCourses";
 
     return map;
   }

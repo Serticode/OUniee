@@ -48,298 +48,302 @@ class _EditStaffDetailsBioDataState extends State<EditStaffDetailsBioData> {
       ),
       child: Form(
         key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            //!TITLE
-            CustomTextWidget(
-              pageTitle: "Edit Staff Bio Data",
-              titleSize: 21,
-              titleFontWeight: FontWeight.bold,
-              titleColour: dark.withOpacity(0.5),
-            ),
-
-            //!OTHER STAFF DETAILS
-            // ! STAFF FULL NAME
-            Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-              //!CALL
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              //!TITLE
               CustomTextWidget(
-                pageTitle: "Full Name: ",
-                titleSize: callSize,
+                pageTitle: "Edit Staff Bio Data",
+                titleSize: 21,
                 titleFontWeight: FontWeight.bold,
-                titleColour: callColour,
+                titleColour: dark.withOpacity(0.5),
               ),
 
-              //! RESPONSE
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
-                child: TextFormField(
-                  controller: _staffNameController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 120,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Do fill in your name";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Your full name",
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: dark)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: active)),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Colors.red.shade900))),
+              //!OTHER STAFF DETAILS
+              // ! STAFF FULL NAME
+              Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+                //!CALL
+                CustomTextWidget(
+                  pageTitle: "Full Name: ",
+                  titleSize: callSize,
+                  titleFontWeight: FontWeight.bold,
+                  titleColour: callColour,
                 ),
-              ),
-            ]),
 
-            //! STAFF ID
-            Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-              //!CALL
-              CustomTextWidget(
-                pageTitle: "Staff ID: ",
-                titleSize: callSize,
-                titleFontWeight: FontWeight.bold,
-                titleColour: callColour,
-              ),
-
-              //! RESPONSE
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
-                child: TextFormField(
-                  controller: _staffIdController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 24,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Kindly fill in your Staff ID";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Staff ID",
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: dark)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: active)),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Colors.red.shade900))),
+                //! RESPONSE
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: TextFormField(
+                    controller: _staffNameController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    maxLength: 120,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Do fill in your name";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Your full name",
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: dark)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: active)),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Colors.red.shade900))),
+                  ),
                 ),
-              ),
-            ]),
+              ]),
 
-            // ! STAFF DEPARTMENT
-            Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-              //!CALL
-              CustomTextWidget(
-                pageTitle: "School & Department: ",
-                titleSize: callSize,
-                titleFontWeight: FontWeight.bold,
-                titleColour: callColour,
-              ),
-
-              //! RESPONSE
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
-                child: TextFormField(
-                  controller: _staffDepartmentController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 120,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Department ?";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Department",
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: dark)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: active)),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Colors.red.shade900))),
+              //! STAFF ID
+              Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+                //!CALL
+                CustomTextWidget(
+                  pageTitle: "Staff ID: ",
+                  titleSize: callSize,
+                  titleFontWeight: FontWeight.bold,
+                  titleColour: callColour,
                 ),
-              ),
-            ]),
 
-            // ! STAFF MAIL
-            Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-              //!CALL
-              CustomTextWidget(
-                pageTitle: "E-Mail: ",
-                titleSize: callSize,
-                titleFontWeight: FontWeight.bold,
-                titleColour: callColour,
-              ),
-
-              //! RESPONSE
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
-                child: TextFormField(
-                  controller: _staffEmailController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 120,
-                  validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        !value.contains("@")) {
-                      return "Confirm your mail address please !";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Email",
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: dark)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: active)),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Colors.red.shade900))),
+                //! RESPONSE
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: TextFormField(
+                    controller: _staffIdController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    maxLength: 24,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Kindly fill in your Staff ID";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Staff ID",
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: dark)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: active)),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Colors.red.shade900))),
+                  ),
                 ),
-              ),
-            ]),
+              ]),
 
-            // ! STAFF CONTACT
-            Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-              //!CALL
-              CustomTextWidget(
-                pageTitle: "Contact: ",
-                titleSize: callSize,
-                titleFontWeight: FontWeight.bold,
-                titleColour: callColour,
-              ),
-
-              //! RESPONSE
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
-                child: TextFormField(
-                  controller: _staffContactController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 120,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "How do we contact you please?";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Contact",
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: dark)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: active)),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Colors.red.shade900))),
+              // ! STAFF DEPARTMENT
+              Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+                //!CALL
+                CustomTextWidget(
+                  pageTitle: "School & Department: ",
+                  titleSize: callSize,
+                  titleFontWeight: FontWeight.bold,
+                  titleColour: callColour,
                 ),
-              ),
-            ]),
 
-            // ! STAFF HOME ADDRESS.
-            Row(mainAxisAlignment: dataAlignment, children: <Widget>[
-              //!CALL
-              CustomTextWidget(
-                pageTitle: "Address: ",
-                titleSize: callSize,
-                titleFontWeight: FontWeight.bold,
-                titleColour: callColour,
-              ),
-
-              //! RESPONSE
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
-                child: TextFormField(
-                  controller: _staffAddressController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 120,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Address?";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Residential address",
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: dark)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 2.0, color: active)),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Colors.red.shade900))),
+                //! RESPONSE
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: TextFormField(
+                    controller: _staffDepartmentController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    maxLength: 120,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Department ?";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Department",
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: dark)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: active)),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Colors.red.shade900))),
+                  ),
                 ),
-              ),
-            ]),
+              ]),
 
-            Container(
-                height: 60.0,
-                width: _screenSize.width * 0.2,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-                child: Align(
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
+              // ! STAFF MAIL
+              Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+                //!CALL
+                CustomTextWidget(
+                  pageTitle: "E-Mail: ",
+                  titleSize: callSize,
+                  titleFontWeight: FontWeight.bold,
+                  titleColour: callColour,
+                ),
 
-                          String _fullName = _staffNameController.text;
-                          String _email = _staffEmailController.text;
-                          String _address = _staffAddressController.text;
-                          String _department = _staffDepartmentController.text;
-                          String _contact = _staffContactController.text;
-                          String _id = _staffIdController.text;
+                //! RESPONSE
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: TextFormField(
+                    controller: _staffEmailController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    maxLength: 120,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !value.contains("@")) {
+                        return "Confirm your mail address please !";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Email",
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: dark)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: active)),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Colors.red.shade900))),
+                  ),
+                ),
+              ]),
 
-                          StaffDataController.updateStaffBiodataDetails(
-                              fullName: _fullName,
-                              staffID: _id,
-                              staffEmail: _email,
-                              staffContact: _contact,
-                              staffAddress: _address,
-                              staffDepartment: _department);
+              // ! STAFF CONTACT
+              Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+                //!CALL
+                CustomTextWidget(
+                  pageTitle: "Contact: ",
+                  titleSize: callSize,
+                  titleFontWeight: FontWeight.bold,
+                  titleColour: callColour,
+                ),
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('User Data Updated')),
-                          );
-                        }
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Icon(
-                              Icons.save_outlined,
-                              color: light,
-                            ),
-                            Text(
-                              "Save Changes",
-                              style: TextStyle(fontSize: 20, color: light),
-                            ),
-                          ]),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(20.0),
-                        primary: active,
-                      ),
-                    ))),
-          ],
+                //! RESPONSE
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: TextFormField(
+                    controller: _staffContactController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    maxLength: 120,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "How do we contact you please?";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Contact",
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: dark)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: active)),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Colors.red.shade900))),
+                  ),
+                ),
+              ]),
+
+              // ! STAFF HOME ADDRESS.
+              Row(mainAxisAlignment: dataAlignment, children: <Widget>[
+                //!CALL
+                CustomTextWidget(
+                  pageTitle: "Address: ",
+                  titleSize: callSize,
+                  titleFontWeight: FontWeight.bold,
+                  titleColour: callColour,
+                ),
+
+                //! RESPONSE
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: TextFormField(
+                    controller: _staffAddressController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    maxLength: 120,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Address?";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Residential address",
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: dark)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 2.0, color: active)),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2.0, color: Colors.red.shade900))),
+                  ),
+                ),
+              ]),
+
+              Container(
+                  height: 60.0,
+                  width: _screenSize.width * 0.2,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 3.0, horizontal: 5.0),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            // If the form is valid, display a snackbar. In the real world,
+                            // you'd often call a server or save the information in a database.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
+                            );
+
+                            String _fullName = _staffNameController.text;
+                            String _email = _staffEmailController.text;
+                            String _address = _staffAddressController.text;
+                            String _department =
+                                _staffDepartmentController.text;
+                            String _contact = _staffContactController.text;
+                            String _id = _staffIdController.text;
+
+                            StaffDataController.updateStaffBiodataDetails(
+                                fullName: _fullName,
+                                staffID: _id,
+                                staffEmail: _email,
+                                staffContact: _contact,
+                                staffAddress: _address,
+                                staffDepartment: _department);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('User Data Updated')),
+                            );
+                          }
+                        },
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Icon(
+                                Icons.save_outlined,
+                                color: light,
+                              ),
+                              Text(
+                                "Save Changes",
+                                style: TextStyle(fontSize: 20, color: light),
+                              ),
+                            ]),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(20.0),
+                          primary: active,
+                        ),
+                      ))),
+            ],
+          ),
         ),
       ),
     );

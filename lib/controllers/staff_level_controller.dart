@@ -21,6 +21,7 @@ class StaffLevelController {
     "Assistant Lecturer",
     "Lecturer 1",
     "Lecturer 2",
+    "Senior Lecturer",
     "Assistant Professor",
     "Professor"
   ];
@@ -29,16 +30,20 @@ class StaffLevelController {
     5,
     10,
     15,
+    15,
     20,
     20
   ];
 
-  static final List<int> numberOfExpectedExperienceYears = [2, 5, 5, 9, 10];
+  static final List<int> numberOfExpectedExperienceYears = [2, 5, 5, 7, 9, 10];
+
+  static final List<int> expectedLeadershipSkillRating = [4, 6, 7, 7, 8, 10];
 
   static final List<String> criteria = [
     "2 years Experience, 5 Publications",
     "5 years Experience, 10 Publications",
     "5 years Experience, 15 Publications",
+    "7 years Experience, 15 Publications",
     "9 years Experience, 20 Publications",
     "10 years Experience, 20 Publications"
   ];

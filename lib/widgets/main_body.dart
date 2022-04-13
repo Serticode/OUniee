@@ -9,7 +9,6 @@ class MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<MainBody> {
-  double containerTwoMargin = 700.0;
   Color getStartedButtonColour = Colors.black;
 
   final TextStyle _bodyTextStyle = const TextStyle(
@@ -18,22 +17,6 @@ class _MainBodyState extends State<MainBody> {
       letterSpacing: 1.05,
       fontSize: 112.0,
       fontFamily: "Mohave-Regular");
-
-  animateMarginTwo() {
-    Future.delayed(
-      const Duration(milliseconds: 700),
-    ).then((value) {
-      setState(() {
-        containerTwoMargin = 0.0;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    animateMarginTwo();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,11 +88,8 @@ class _MainBodyState extends State<MainBody> {
           //!RIGHT CONTAINER
           Expanded(
             child: ListView(children: <Widget>[
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 2000),
-                curve: Curves.decelerate,
+              Container(
                 padding: const EdgeInsets.symmetric(vertical: 32.0),
-                margin: EdgeInsets.symmetric(vertical: containerTwoMargin),
                 height: _screenSize.height / 1.5,
                 width: _screenSize.width / 2.3,
                 decoration: BoxDecoration(

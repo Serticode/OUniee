@@ -13,7 +13,10 @@ import 'package:ouniee/controllers/submitted_application_controller.dart';
 import 'package:ouniee/pages/landing_page.dart';
 
 void main() async {
+  //! ENSURE THAT ALL NEEDED RESOURCES BY THE SYSTEM HAVE BEEN LOADED.
   WidgetsFlutterBinding.ensureInitialized();
+
+  //! INITIALIZE / THE CONTROLLERS NEEDED BY THE SYSTEM.
   await initialization.then((value) {
     Get.put(AuthController());
     Get.put(StaffDataController());
@@ -22,9 +25,11 @@ void main() async {
     Get.put(MenuController());
   });
 
+  //! runApp() - THIS IS USED TO INFLATE / DRAW THE UI DESCRIBED BY THE PARAMETER MyApp() PASSED IN.
   runApp(const MyApp());
 }
 
+//! BASE CLASS, CARRYING THE UI DESCRIPTION, THE SCREEN SCROLL BEHAVIOUR & THEME
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -35,16 +40,20 @@ class MyApp extends StatelessWidget {
       title: "OUniee",
       scrollBehavior: MyCustomScrollBehavior(), // <== add here
       theme: ThemeData(
-          scaffoldBackgroundColor: active.withOpacity(.05),
+          scaffoldBackgroundColor: light,
           pageTransitionsTheme: const PageTransitionsTheme(builders: {
             TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
             TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
           })),
-      home: const LandingPage(),
+
+      //! THE UI DESCRIPTION CLASS - LANDING PAGE()
+      home: LandingPage(),
     );
   }
 }
 
+//! SCROLL BEHAVIOUR CLASS, ACCEPTING ONLY TWO TYPES OF SCROLL DEVICES;
+//! MOUSE AND TOUCH.
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override

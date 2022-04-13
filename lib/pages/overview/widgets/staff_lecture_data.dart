@@ -16,10 +16,6 @@ class _StaffLectureDataState extends State<StaffLectureData> {
   List<dynamic>? _coursesStaffTeach = [];
   @override
   void didChangeDependencies() {
-    /* List? /* <Map<String, dynamic>> */ theCourses =
-        StaffDataController.usersData["coursesStaffTeach"];
-    StaffDataController.usersData["coursesStaffTeach"];
-     */
     setState(() {
       _coursesStaffTeach = StaffDataController.usersData["coursesStaffTeach"];
     });

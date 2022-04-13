@@ -17,7 +17,7 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
-  final bool isAdmin = StaffDataController.usersData["isAdmin"];
+  final bool isAdmin = false;
   String isApplicationApproved =
       StaffDataController.usersData["applicationApproved"];
 

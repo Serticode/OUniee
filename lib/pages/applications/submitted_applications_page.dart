@@ -18,7 +18,6 @@ class SubmittedApplications extends StatefulWidget {
 
 class _SubmittedApplicationsState extends State<SubmittedApplications> {
   //!SORTING MEMBERS
-  //int? _sortColumnIndex;
   bool isAscending = false;
   bool areThereApplicationsSubmitted = false;
   final double tableDataFontSize = 18.0;
@@ -282,20 +281,4 @@ class _SubmittedApplicationsState extends State<SubmittedApplications> {
                 titleSize: 21.0,
               )))
           .toList();
-/* 
-  List<DataRow> _getRows({required List<dynamic> dataToBeDisplayed}) =>
-      dataToBeDisplayed.map((_theData) {
-        return DataRow(cells: _getCells(theCellsData: dataToBeDisplayed));
-      }).toList();
-
-  List<DataCell> _getCells({required List<dynamic> theCellsData}) =>
-      theCellsData
-          .map((_theData) => DataCell(
-                CustomTextWidget(
-                    pageTitle: _theData.toString(),
-                    titleColour: dark,
-                    titleSize: tableDataFontSize,
-                    titleFontWeight: FontWeight.normal),
-              ))
-          .toList(); */
 }

@@ -29,7 +29,7 @@ class AuthController extends GetxController {
   //!IF THERE IS NO USER, SHOW SIGN IN ELSE SHOW DASHBOARD
   static setUpInitialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => const LandingPage());
+      Get.offAll(() => LandingPage());
     } else {
       Get.offAll(() => Dashboard());
     }
